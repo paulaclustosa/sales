@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "Sales Api for ECommerce store"
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/sales
