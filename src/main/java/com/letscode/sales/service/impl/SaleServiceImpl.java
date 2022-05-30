@@ -14,6 +14,11 @@ public class SaleServiceImpl implements SaleService {
   private final SaleRepository saleRepository;
 
   @Override
+  public Mono<Sale> createSale(String costumerUuid, String productUuid) {
+    return null;
+  }
+
+  @Override
   public Mono<Void> cancelSale(String saleUuid) {
     return null;
   }

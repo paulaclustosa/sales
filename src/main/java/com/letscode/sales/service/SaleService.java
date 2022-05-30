@@ -3,7 +3,9 @@ package com.letscode.sales.service;
 import com.letscode.sales.model.Sale;
 import reactor.core.publisher.Mono;
 
-public interface SaleService{
+public interface SaleService {
+
+  public Mono<Sale> createSale(String costumerUuid, String productUuid);
 
   public Mono<Void> cancelSale(String saleUuid);
 
