@@ -1,4 +1,4 @@
-package com.letscode.sales.DTO;
+package com.letscode.sales.dto;
 
 import lombok.Getter;
 
