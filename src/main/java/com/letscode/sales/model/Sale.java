@@ -22,7 +22,7 @@ public class Sale {
 
   private String uuid = UUID.randomUUID().toString();
 
-  private String userUuid;
+  private Customer customer;
 
   @Field(name = "shopping-cart")
   private Cart cart;
