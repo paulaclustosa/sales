@@ -1,6 +1,32 @@
+server:
+  port: 8090
+
 spring:
   application:
-    name: "Sales Api for ECommerce store"
+    name: sale-api
   data:
     mongodb:
-      uri: mongodb://mongodb:27017/sales
+      uri: mongodb://localhost:27017/sales
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring:application:name}
+  endpoint:
+    metrics:
+      enabled: false
+    prometheus:
+      enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
