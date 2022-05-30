@@ -1,7 +1,7 @@
 package com.letscode.sales.controller.handler;
 
-import com.letscode.sales.DTO.CartRequest;
-import com.letscode.sales.DTO.CartResponse;
+import com.letscode.sales.dto.CartRequest;
+import com.letscode.sales.dto.CartResponse;
 import com.letscode.sales.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
