@@ -1,12 +1,14 @@
 package com.letscode.sales.service;
 
-import com.letscode.sales.model.Cart;
+import com.letscode.sales.dto.CartRequest;
+import com.letscode.sales.dto.CartResponse;
 import reactor.core.publisher.Mono;
 
 public interface CartService {
-  public Mono<Cart> createCart(String userUuid);
 
-  public Mono<Cart> addToCart(String productUuid, int quantity);
+  public Mono<CartResponse> createCart(CartRequest request);
 
-  public Mono<Cart> removeFromCart(String productUuid, int quantity);
+  public Mono<CartResponse> addToCart(String cartUuid, CartRequest request);
+
+  public Mono<CartResponse> removeFromCart(CartRequest request);
 }
