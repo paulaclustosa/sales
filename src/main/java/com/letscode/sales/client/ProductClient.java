@@ -1,6 +1,7 @@
 package com.letscode.sales.client;
 
-import com.letscode.sales.model.Product;
+import com.letscode.sales.dto.ProductClientResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -10,11 +11,12 @@ public class ProductClient {
 
   private WebClient webClient = WebClient.create("http://localhost:8081");
 
-  public Mono<Product> findProductById(String productId) {
-    return webClient.get()
-        .uri("/products/{uuid}")
+  public Mono<ProductClientResponse> findProductByUuid(String productUuid) {
+
+    return webClient.method(HttpMethod.GET)
+        .uri("/products/{productUuid}", productUuid)
         .retrieve()
-        .bodyToMono(Product.class);
+        .bodyToMono(ProductClientResponse.class);
   }
 
 }
