@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
                   .doOnSuccess(
                       cart -> {
                         log.info(cart.getUuid());
-                        log.info(cart.getShoppingCart().get(0).getName());
+                        //log.info(cart.getProducts().get(0).getName());
                       });
               savedCart.subscribe(s -> log.info("Value {}", s.getUuid()));
             });
@@ -54,15 +54,16 @@ public class CartServiceImpl implements CartService {
 
     Mono<ProductClientResponse> productMono = productClientResponseMono.doOnSuccess(productClientResponse -> {
       Product product = new Product(productClientResponse);
-      product.setCartQuantity(cartRequest.getQuantity());
+      //product.setCartQuantity(cartRequest.getQuantity());
 
       Mono<Cart> cartMono = cartRespository.findByUuid(cartUuid).doOnSuccess(cart -> {
-        cart.updateShoppingCart(product);
+        //cart.updateShoppingCart(product);
+        cart.updateShoppingCart(product, cartRequest.getQuantity());
         Mono<Cart> savedCart = cartRespository.save(cart);
         savedCart.subscribe();
       });
 
-      cartMono.subscribe(s -> log.info("Value log1 {}", s.getShoppingCart().toString()));
+      cartMono.subscribe(s -> log.info("Value log1 {}", s.getProducts().toString()));
     });
 
     productMono.subscribe(s -> log.info("Value log2 {}", s.getName()));
