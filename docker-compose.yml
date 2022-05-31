@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  mongo-container:
+    container_name: mongo_container
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    restart: unless-stopped
+    networks:
+      - shopping-network
+
+volumes:
+  mongodata:
+
+networks:
+  shopping-network:
+    driver: bridge
