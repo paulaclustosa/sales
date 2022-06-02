@@ -11,10 +11,10 @@ public class ProductClient {
 
   private WebClient webClient = WebClient.create("http://localhost:8081");
 
-  public Mono<ProductClientResponse> findProductByUuid(String productUuid) {
+  public Mono<ProductClientResponse> findProductByUuid(String productUuid, int quantity) {
 
     return webClient.method(HttpMethod.GET)
-        .uri("/products/{productUuid}", productUuid)
+        .uri("/products/{productUuid}/{quantity}", productUuid, quantity)
         .retrieve()
         .bodyToMono(ProductClientResponse.class);
   }

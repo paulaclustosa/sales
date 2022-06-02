@@ -12,10 +12,15 @@ public class CustomerClient {
   private WebClient webClient = WebClient.create("http://localhost:8080");
 
   public Mono<Customer> findCustomerByUuid(String customerUuid) {
-    return webClient.method(HttpMethod.GET)
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    return webClient
+        .method(HttpMethod.GET)
         .uri("/users/{customerUuid}", customerUuid)
         .retrieve()
         .bodyToMono(Customer.class);
   }
-
 }
