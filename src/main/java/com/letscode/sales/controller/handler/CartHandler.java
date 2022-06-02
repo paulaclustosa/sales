@@ -2,6 +2,8 @@ package com.letscode.sales.controller.handler;
 
 import com.letscode.sales.dto.CartRequest;
 import com.letscode.sales.dto.CartResponse;
+import com.letscode.sales.dto.FindCartResponse;
+import com.letscode.sales.dto.RemoveItemFromCartRequest;
 import com.letscode.sales.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,5 +35,33 @@ public class CartHandler {
         .contentType(MediaType.APPLICATION_JSON)
         .body(BodyInserters.fromPublisher(cartMono.flatMap(cartRequest ->
           cartService.addToCart(cartId, cartRequest)), CartResponse.class));
+  }
+
+  public Mono<ServerResponse> findCartByUuid(ServerRequest request) {
+    String cartUuid = request.pathVariable("cartUuid");
+
+    return ServerResponse.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(cartService.findCartByUuid(cartUuid), FindCartResponse.class);
+  }
+
+  public Mono<ServerResponse> findAll(ServerRequest request) {
+    return ServerResponse.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(cartService.findAll(), FindCartResponse.class);
+  }
+
+  public Mono<ServerResponse> removeItemFromCart(ServerRequest request){
+    RemoveItemFromCartRequest removeItemFromCartRequest = new RemoveItemFromCartRequest("cartUuid", "productUuid");
+    return ServerResponse.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(cartService.removeItemFromCart(removeItemFromCartRequest), CartResponse.class );
+  }
+
+  public Mono<ServerResponse> deleteCart(ServerRequest request) {
+    String cartUuid = request.pathVariable("cartUuid");
+    return ServerResponse.status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(cartService.deleteCart(cartUuid), CartResponse.class);
   }
 }
