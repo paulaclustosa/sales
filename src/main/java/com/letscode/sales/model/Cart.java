@@ -8,7 +8,10 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Document
 @Getter
@@ -16,31 +19,24 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
-  @Id
-  private ObjectId id;
+  @Id private ObjectId id;
   private String uuid = UUID.randomUUID().toString();
-  //private List<Product> shoppingCart = new ArrayList<>();
   private Map<String, Product> products = new HashMap<>();
+  private BigDecimal subtotal = new BigDecimal(0);
 
   public Cart(Product product) {
-    //this.shoppingCart.add(product);
     this.products.put(product.getUuid(), product);
+    updateSubtotal();
   }
 
-  public void updateShoppingCart(Product createdProduct, int quantityFromRequest) {
-    String productUuid = createdProduct.getUuid();
+  public void updateSubtotal() {
+    BigDecimal subtotalInit = new BigDecimal(0);
 
-    if (products.containsKey(productUuid)) {
-      int previousQuantity = products.get(productUuid).getCartQuantity();
-      int updatedQuantity = previousQuantity + quantityFromRequest;
-      createdProduct.setCartQuantity(updatedQuantity);
-      this.products.put(productUuid, createdProduct);
+    for (Product product : this.products.values()) {
+      BigDecimal cartQuantity = BigDecimal.valueOf(product.getCartQuantity());
+      BigDecimal sum = product.getPrice().multiply(cartQuantity);
+      subtotalInit.add(sum);
     }
-    else {
-      createdProduct.setCartQuantity(quantityFromRequest);
-      this.products.put(productUuid, createdProduct);
-    }
-
-    //this.shoppingCart.add(product);
+    this.subtotal = subtotalInit;
   }
 }
