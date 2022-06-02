@@ -28,8 +28,12 @@ public class CartRouter {
     return route()
         .path("/shopping-cart", b1 -> b1
           .nest(accept(APPLICATION_JSON), b2 -> b2
-              .POST("", handler::createCart)
-              .PATCH("/{cartUuid}", handler::updateCart)))
+                  .POST("", handler::createCart)
+                  .GET("/{cartUuid}", handler::findCartByUuid)
+                  .GET("", handler::findAll)
+                  .DELETE("", handler::deleteCart)
+                  .PATCH("", handler::removeItemFromCart)
+                  .PATCH("/{cartUuid}", handler::updateCart)))
         .build();
   }
 
