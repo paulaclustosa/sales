@@ -16,10 +16,9 @@ public class Product {
   private BigDecimal price;
   private int cartQuantity;
 
-  public Product (ProductClientResponse clientProductResponse){
+  public Product(ProductClientResponse clientProductResponse) {
     this.uuid = clientProductResponse.getUuid();
     this.name = clientProductResponse.getName();
-    this.price =  clientProductResponse.getPrice();
-  };
-
+    this.price = clientProductResponse.getPrice();
+  }
 }
