@@ -10,8 +10,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
-// @AllArgsConstructor
-// @RequiredArgsConstructor
 @Configuration
 public class CartRouter {
 
@@ -19,17 +17,14 @@ public class CartRouter {
   public RouterFunction<ServerResponse> routeShoppingCart(CartHandler handler) {
     return route()
         .path(
-            "/shopping-cart",
-            b1 ->
-                b1.nest(
-                    accept(APPLICATION_JSON),
-                    b2 ->
-                        b2.POST("", handler::createCart)
-                            .GET("/{cartUuid}", handler::findCartByUuid)
-                            .GET("", handler::findAll)
-                            .PATCH("/{cartUuid}", handler::handleAddToCart)
-                            .PATCH("", handler::removeItemFromCart)
-                            .DELETE("", handler::deleteCart)))
+            "/shopping-cart", b1 -> b1
+              .nest(accept(APPLICATION_JSON), b2 -> b2
+                  .POST("", handler::createCart)
+                  .GET("/{cartUuid}", handler::findCartByUuid)
+                  .GET("", handler::findAll)
+                  .PATCH("/{cartUuid}", handler::handleAddToCart)
+                  .PATCH("", handler::removeItemFromCart)
+                  .DELETE("", handler::deleteCart)))
         .build();
   }
 }
