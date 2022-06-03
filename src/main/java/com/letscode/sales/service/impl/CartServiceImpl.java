@@ -32,25 +32,20 @@ public class CartServiceImpl implements CartService {
     Mono<ProductClientResponse> productClientResponseMono =
         productClient
             .findProductByUuid(productUuid, productQuantity)
-            .doOnSuccess(
+            .doOnNext(
                 productClientResponse -> {
                   Product newProduct = new Product(productClientResponse);
                   newProduct.setCartQuantity(cartRequest.getQuantity());
 
                   Cart newCart = new Cart(newProduct);
                   Mono<Cart> savedCart =
-                      cartRepository
-                          .save(newCart)
-                          .doOnNext(
-                              cart -> {
-                                log.info(cart.getUuid());
-                              });
+                      cartRepository.save(newCart).doOnNext(cart -> log.info(cart.getUuid()));
                   savedCart.subscribe(s -> log.info("Value {}", s.getUuid()));
                 });
 
     productClientResponseMono.subscribe(s -> log.info("Value {}", s.getName()));
 
-    return Mono.just(new CartResponse());
+    return Mono.just(new CartResponse()); // / TODO: 03/06/2022arrumar o retorno
   }
 
   @Override
@@ -63,33 +58,17 @@ public class CartServiceImpl implements CartService {
     return this.cartRepository.findAll().map(MapperToFindCartResponse::execute);
   }
 
-  private void addToCart(
-      Cart cartRetrievedFromDb, Product productToAddToCart, int quantityFromRequest) {
-    String productUuid = productToAddToCart.getUuid();
-    Map<String, Product> cartProducts = cartRetrievedFromDb.getProducts();
-
-    if (cartProducts.containsKey(productUuid)) {
-      int previousQuantity = cartProducts.get(productUuid).getCartQuantity();
-      int updatedQuantity = previousQuantity + quantityFromRequest;
-
-      productToAddToCart.setCartQuantity(updatedQuantity);
-      cartProducts.put(productUuid, productToAddToCart);
-    } else {
-      productToAddToCart.setCartQuantity(quantityFromRequest);
-      cartProducts.put(productUuid, productToAddToCart);
-    }
-  }
-
   // Situação: carrinho já criado. Aqui se
   // adiciona o novo produto e sua respectiva quantidade ao carrinho
   // ou, caso o produto já esteja no carrinho, atualiza a sua quantidade (quantidade que se tinha +
   // quantidade que se deseja aumentar)
   @Override
-  public Mono<CartResponse> handleAddToCart(String cartUuid, CartRequest cartRequest) {
+  public Mono<ProductClientResponse> handleAddToCart(String cartUuid, CartRequest cartRequest) {
     log.info("Entered addToCart function...");
 
     Mono<ProductClientResponse> productClientResponseMono =
         productClient.findProductByUuid(cartRequest.getProductUuid(), cartRequest.getQuantity());
+
 
     Mono<ProductClientResponse> productMono =
         productClientResponseMono.doOnNext(
@@ -110,8 +89,26 @@ public class CartServiceImpl implements CartService {
               cartMono.subscribe(s -> log.info("Value log1 {}", s.getProducts().toString()));
             });
 
+
     productMono.subscribe(s -> log.info("Value log2 {}", s.getName()));
-    return Mono.just(new CartResponse());
+    return productMono;
+  }
+
+  private void addToCart(
+      Cart cartRetrievedFromDb, Product productToAddToCart, int quantityFromRequest) {
+    String productUuid = productToAddToCart.getUuid();
+    Map<String, Product> cartProducts = cartRetrievedFromDb.getProducts();
+
+    if (cartProducts.containsKey(productUuid)) {
+      int previousQuantity = cartProducts.get(productUuid).getCartQuantity();
+      int updatedQuantity = previousQuantity + quantityFromRequest;
+
+      productToAddToCart.setCartQuantity(updatedQuantity);
+      cartProducts.put(productUuid, productToAddToCart);
+    } else {
+      productToAddToCart.setCartQuantity(quantityFromRequest);
+      cartProducts.put(productUuid, productToAddToCart);
+    }
   }
 
   // Situação: carrinho já criado. Aqui se
