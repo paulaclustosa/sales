@@ -9,6 +9,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface CartRepository extends ReactiveCrudRepository<Cart, ObjectId> {
   Mono<Cart> findByUuid(String uuid);
-  Mono<Void> deleteByUuid(String Uuid);
-  //Mono<Void> deleteByUuid(Cart cart);
+  Mono<Void> deleteByUuid(String uuid);
 }
