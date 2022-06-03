@@ -1,6 +1,7 @@
 package com.letscode.sales.service.impl;
 
 import com.letscode.sales.client.CustomerClient;
+import com.letscode.sales.dto.CustomerClientResponse;
 import com.letscode.sales.dto.SaleResponse;
 import com.letscode.sales.model.Cart;
 import com.letscode.sales.model.Customer;
@@ -66,7 +67,8 @@ public class SaleServiceImpl implements SaleService {
 
     //    Mono<Sale> sale = Mono.just(new Sale());
     //        saleMono.subscribe();
-    Mono<Customer> customer = customerClient.findCustomerByUuid(customerUuid);
+    Mono<CustomerClientResponse> customerClientResponse =
+        customerClient.findUserByUuid(customerUuid);
     //      .doOnNext(sale::setCustomer);
     //        customer.subscribe();
 
@@ -77,13 +79,14 @@ public class SaleServiceImpl implements SaleService {
     //    Mono<Sale> savedSale = saleRepository.save(sale);
     //        savedSale.subscribe();
 
-    return Mono.zip(customer, shoppingCart)
+    return Mono.zip(customerClientResponse, shoppingCart)
         .flatMap(
             monos -> {
-              Customer customer1 = monos.getT1();
+              CustomerClientResponse customer1 = monos.getT1();
+              Customer customer = new Customer(customer1);
               Cart cart1 = monos.getT2();
               Sale sale = new Sale();
-              sale.setCustomer(customer1);
+              sale.setCustomer(customer);
               sale.setCart(cart1);
               return saleRepository.save(sale);
             })
