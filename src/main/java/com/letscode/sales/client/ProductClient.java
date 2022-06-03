@@ -1,25 +1,29 @@
 package com.letscode.sales.client;
 
+import com.letscode.sales.config.WebClientConfig;
 import com.letscode.sales.dto.ProductClientResponse;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-@FeignClient(name = "product-api", url = "localhost:8081")
-public interface ProductClient {
-  @GetMapping("/{uuid}/{quantity}")
-  ProductClientResponse getProductForSale(
-      @PathVariable("uuid") String uuid, @PathVariable("quantity") int quantity);
+// @FeignClient(name = "product-api")
+@Service
+@RequiredArgsConstructor
+public class ProductClient {
+  //  @GetMapping("/{uuid}/{quantity}")
+  //  Mono<ProductClientResponse> findProductByUuid(
+  //      @PathVariable("uuid") String uuid, @PathVariable("quantity") int quantity);
 
-  //
-  //  private WebClient webClient = WebClient.create("http://localhost:8081");
-  //
-  //  public Mono<ProductClientResponse> findProductByUuid(String productUuid, int quantity) {
-  //
-  //    return webClient.method(HttpMethod.GET)
-  //        .uri("/products/{productUuid}/{quantity}", productUuid, quantity)
-  //        .retrieve()
-  //        .bodyToMono(ProductClientResponse.class);
-  //  }
+//  private WebClient webClient = WebClient.create("http://localhost:8081");
 
+  private final WebClientConfig webClient;
+  public Mono<ProductClientResponse> findProductByUuid(String productUuid, int quantity) {
+    return webClient.getWebClientBuilder().baseUrl("http://product-api").build()
+        .method(HttpMethod.GET)
+        .uri("/products/{productUuid}/{quantity}", productUuid, quantity)
+        .retrieve()
+        .bodyToMono(ProductClientResponse.class);
+  }
 }
