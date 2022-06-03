@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Status {
-  OPEN("OPEN"),
-  CANCELED("CANCELED"),
-  FINISHED("FINISHED");
+  OPEN("open"),
+  CANCELED("canceled"),
+  FINISHED("finished");
 
   private final String status;
 
