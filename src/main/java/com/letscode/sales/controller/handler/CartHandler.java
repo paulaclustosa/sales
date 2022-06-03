@@ -53,11 +53,15 @@ public class CartHandler {
   }
 
   public Mono<ServerResponse> removeItemFromCart(ServerRequest request) {
-    RemoveItemFromCartRequest removeItemFromCartRequest =
-        new RemoveItemFromCartRequest("cartUuid", "productUuid");
+//    RemoveItemFromCartRequest removeItemFromCartRequest =
+//        new RemoveItemFromCartRequest("cartUuid", "productUuid");
+    Mono<RemoveItemFromCartRequest> removeItemFromCartRequest = request.bodyToMono(RemoveItemFromCartRequest.class);
     return ServerResponse.status(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
-        .body(cartService.removeItemFromCart(removeItemFromCartRequest), CartResponse.class);
+        .body(
+            BodyInserters.fromPublisher(
+                removeItemFromCartRequest.flatMap(cartService::removeItemFromCart),
+                CartResponse.class));
   }
 
   public Mono<ServerResponse> deleteCart(ServerRequest request) {
