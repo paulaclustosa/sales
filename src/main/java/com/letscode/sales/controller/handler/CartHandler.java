@@ -53,8 +53,6 @@ public class CartHandler {
   }
 
   public Mono<ServerResponse> removeItemFromCart(ServerRequest request) {
-//    RemoveItemFromCartRequest removeItemFromCartRequest =
-//        new RemoveItemFromCartRequest("cartUuid", "productUuid");
     Mono<RemoveItemFromCartRequest> removeItemFromCartRequest = request.bodyToMono(RemoveItemFromCartRequest.class);
     return ServerResponse.status(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
