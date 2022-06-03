@@ -24,60 +24,10 @@ public class SaleServiceImpl implements SaleService {
   @Override
   public Mono<SaleResponse> createSale(String customerUuid, String cartUuid) {
 
-    /*var a = customerClient.findCustomerByUuid(customerUuid)
-      .doOnNext(customer -> {
-        Sale createdSale = new Sale();
-        createdSale.setCustomer(customer);
-      }).flatMap(customer -> Mono.just(createdSale);
-
-    }).*/
-
-    //    Mono<Sale> saleMono =
-    //        Mono.just(new Sale())
-    //            .doOnNext(
-    //                sale -> {
-    //                  Customer customer =
-    //                      customerClient
-    //                          .findCustomerByUuid(customerUuid)
-    //                          .doOnNext(sale::setCustomer)
-    //                          .block();
-    //
-    // .then(cartRepository.findByUuid(cartUuid).doOnNext(sale::setCart));
-    //                  customer
-    //                      .doAfterTerminate(
-    //                          (Runnable)
-    // cartRepository.findByUuid(cartUuid).doOnNext(sale::setCart))
-    //                      //                      .doAfterTerminate(
-    //                      //                          (Runnable)
-    //                      //
-    // cartRepository.findByUuid(cartUuid).doOnNext(sale::setCart))
-    //                      .subscribe();
-    //
-    //                  customer.subscribe();
-
-    //                  Cart shoppingCart =
-    //                      cartRepository.findByUuid(cartUuid).doOnNext(sale::setCart).block();
-
-    //                  sale.setCart(shoppingCart);
-
-    //                  saleRepository.save(sale).subscribe();
-    //                });
-
-    //    saleMono.subscribe();
-
-    //    Mono<Sale> sale = Mono.just(new Sale());
-    //        saleMono.subscribe();
     Mono<CustomerClientResponse> customerClientResponse =
         customerClient.findUserByUuid(customerUuid);
-    //      .doOnNext(sale::setCustomer);
-    //        customer.subscribe();
 
     Mono<Cart> shoppingCart = cartRepository.findByUuid(cartUuid);
-    //            .doOnNext(sale::setCart);
-    //        shoppingCart.subscribe();
-
-    //    Mono<Sale> savedSale = saleRepository.save(sale);
-    //        savedSale.subscribe();
 
     return Mono.zip(customerClientResponse, shoppingCart)
         .flatMap(
