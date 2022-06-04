@@ -31,6 +31,10 @@ public class Cart {
   }
 
   public void updateSubtotal() {
-    this.subtotal = products.values().stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    this.subtotal =
+        products.values().stream()
+            .map(product ->
+                product.getPrice().multiply(BigDecimal.valueOf(product.getCartQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }
