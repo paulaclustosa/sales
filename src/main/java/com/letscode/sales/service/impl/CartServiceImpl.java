@@ -9,6 +9,7 @@ import com.letscode.sales.repository.CartRepository;
 import com.letscode.sales.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -81,8 +82,11 @@ public class CartServiceImpl implements CartService {
                       .findByUuid(cartUuid)
                       .doOnNext(
                           cart -> {
-                            //if (cart.getStatus() == Status.FINISHED) { throw new Ex }
-                              addToCart(cart, product, cartRequest.getQuantity());
+                            if (cart.getStatus() == Status.FINISHED) {
+                              throw new RuntimeException("O carrinho está com o status finished (fechado), " +
+                                  "portanto não pode ser manipulado!");
+                            }
+                            addToCart(cart, product, cartRequest.getQuantity());
                             cart.updateSubtotal();
                             Mono<Cart> savedCart = cartRepository.save(cart);
                             savedCart.subscribe();
@@ -116,8 +120,7 @@ public class CartServiceImpl implements CartService {
   // adiciona o novo produto e sua respectiva quantidade ao carrinho
   // sobrescrevendo o anterior
   @Override
-  public Mono<CartResponse> updateCart(String cartUuid, CartRequest cartRequest) {
-    // Recuperar Carrinho
+  public Mono<ProductClientResponse> updateCart(String cartUuid, CartRequest cartRequest) {
     Mono<ProductClientResponse> productClientResponseMono =
         productClient.findProductByUuid(cartRequest.getProductUuid(), cartRequest.getQuantity());
 
@@ -132,15 +135,20 @@ public class CartServiceImpl implements CartService {
                       .findByUuid(cartUuid)
                       .doOnNext(
                           cart -> {
+                            if (cart.getStatus() == Status.FINISHED) {
+                              throw new RuntimeException("O carrinho está com o status finished (fechado), " +
+                                  "portanto não pode ser manipulado!");
+                            }
                             Map<String, Product> products = cart.getProducts();
                             products.put(productToBeAdded.getUuid(), productToBeAdded);
+                            cart.updateSubtotal();
                             cartRepository.save(cart).subscribe();
                           });
 
               cartMono.subscribe();
             });
     productMono.subscribe();
-    return Mono.just(new CartResponse());
+    return productMono;
   }
 
   @Override
