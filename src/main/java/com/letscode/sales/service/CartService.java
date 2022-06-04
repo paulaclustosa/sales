@@ -11,7 +11,7 @@ public interface CartService {
 
   public Mono<ProductClientResponse> handleAddToCart(String cartUuid, CartRequest request);
 
-  public Mono<CartResponse> updateCart(String cartUuid, CartRequest cartRequest);
+  public Mono<ProductClientResponse> updateCart(String cartUuid, CartRequest cartRequest);
 
   public Mono<CartResponse> removeItemFromCart(RemoveItemFromCartRequest removeItemFromCartRequest);
 
