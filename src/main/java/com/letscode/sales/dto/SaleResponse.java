@@ -7,20 +7,19 @@ import com.letscode.sales.model.Status;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 public class SaleResponse {
   private String uuid;
   private Customer customer;
   private Cart cart;
-  private Status status;
-  private LocalDateTime creationDate;
+  private Date creationDate;
 
   public SaleResponse(Sale sale) {
     this.uuid = sale.getUuid();
     this.customer = sale.getCustomer();
     this.cart = sale.getCart();
-    this.status = sale.getStatus();
     this.creationDate = sale.getCreationDate();
   }
 }
