@@ -22,7 +22,8 @@ public class CartRouter {
                   .POST("", handler::createCart)
                   .GET("/{cartUuid}", handler::findCartByUuid)
                   .GET("", handler::findAll)
-                  .PATCH("/{cartUuid}", handler::handleAddToCart)
+                  .PATCH("/{cartUuid}/add", handler::handleAddToCart)
+                  .PATCH("/{cartUuid}/update", handler::updateCart)
                   .PATCH("", handler::removeItemFromCart)
                   .DELETE("/{cartUuid}", handler::deleteCart)))
         .build();
