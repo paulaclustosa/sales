@@ -31,11 +31,6 @@ public class ProductClient {
   public Mono<String> removeItemsfromInventory(CartListRequest cartRequest) {
     log.info("Entrei no client do Product para atualizar o inventário");
 
-//    return webClient.getWebClientBuilder().baseUrl("http://product-api").build()
-//        .method(HttpMethod.GET)
-//        .uri("/products/remove/{productUuid}/{quantity}", productUuid, quantity)
-//        .retrieve()
-//        .bodyToMono(String.class);
 
     return webClient.getWebClientBuilder().baseUrl("http://product-api").build()
         .method(HttpMethod.PUT)

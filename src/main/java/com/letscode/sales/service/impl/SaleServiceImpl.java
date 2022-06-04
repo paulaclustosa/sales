@@ -58,11 +58,7 @@ public class SaleServiceImpl implements SaleService {
         .map(SaleResponse::new);
   }
 
-//  private void removeItemsFromProduct(Cart cart) {
-//    cart.getProducts().forEach((key, product) -> {
-//      productClient.removeItemsfromInventory(key, product.getCartQuantity()).subscribe();
-//    });
-//  }
+
 
   private List<CartRequest> cartToCartRequestDto(Cart cart) {
     List<CartRequest> cartRequestList = new ArrayList<>();
