@@ -30,6 +30,8 @@ public class Sale {
   @Field(targetType = FieldType.STRING)
   private Status status;
 
+
+
   @CreatedDate private LocalDateTime creationDate;
 
   @LastModifiedDate private LocalDateTime updateDate;
