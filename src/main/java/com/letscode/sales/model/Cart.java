@@ -22,21 +22,15 @@ public class Cart {
   @Id private ObjectId id;
   private String uuid = UUID.randomUUID().toString();
   private Map<String, Product> products = new HashMap<>();
-  private BigDecimal subtotal = new BigDecimal(0);
+  private BigDecimal subtotal;
+  private Status status;
 
   public Cart(Product product) {
     this.products.put(product.getUuid(), product);
-    updateSubtotal();
+    this.status = Status.OPEN;
   }
 
   public void updateSubtotal() {
-    BigDecimal subtotalInit = new BigDecimal(0);
-
-    for (Product product : this.products.values()) {
-      BigDecimal cartQuantity = BigDecimal.valueOf(product.getCartQuantity());
-      BigDecimal sum = product.getPrice().multiply(cartQuantity);
-      subtotalInit.add(sum);
-    }
-    this.subtotal = subtotalInit;
+    this.subtotal = products.values().stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }
