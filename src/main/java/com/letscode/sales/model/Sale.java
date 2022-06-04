@@ -6,11 +6,13 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Document
@@ -27,12 +29,6 @@ public class Sale {
   @Field(name = "shopping-cart")
   private Cart cart;
 
-  @Field(targetType = FieldType.STRING)
-  private Status status;
+  @CreatedDate private Date creationDate;
 
-
-
-  @CreatedDate private LocalDateTime creationDate;
-
-  @LastModifiedDate private LocalDateTime updateDate;
 }
