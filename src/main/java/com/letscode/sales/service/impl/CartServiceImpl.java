@@ -4,6 +4,7 @@ import com.letscode.sales.client.ProductClient;
 import com.letscode.sales.dto.*;
 import com.letscode.sales.model.Cart;
 import com.letscode.sales.model.Product;
+import com.letscode.sales.model.Status;
 import com.letscode.sales.repository.CartRepository;
 import com.letscode.sales.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +71,6 @@ public class CartServiceImpl implements CartService {
     Mono<ProductClientResponse> productClientResponseMono =
         productClient.findProductByUuid(cartRequest.getProductUuid(), cartRequest.getQuantity());
 
-
     Mono<ProductClientResponse> productMono =
         productClientResponseMono.doOnNext(
             productClientResponse -> {
@@ -81,7 +81,8 @@ public class CartServiceImpl implements CartService {
                       .findByUuid(cartUuid)
                       .doOnNext(
                           cart -> {
-                            addToCart(cart, product, cartRequest.getQuantity());
+                            //if (cart.getStatus() == Status.FINISHED) { throw new Ex }
+                              addToCart(cart, product, cartRequest.getQuantity());
                             cart.updateSubtotal();
                             Mono<Cart> savedCart = cartRepository.save(cart);
                             savedCart.subscribe();
@@ -89,7 +90,6 @@ public class CartServiceImpl implements CartService {
 
               cartMono.subscribe(s -> log.info("Value log1 {}", s.getProducts().toString()));
             });
-
 
     productMono.subscribe(s -> log.info("Value log2 {}", s.getName()));
     return productMono;
