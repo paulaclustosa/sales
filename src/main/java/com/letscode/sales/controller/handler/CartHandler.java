@@ -24,7 +24,7 @@ public class CartHandler {
         .contentType(MediaType.APPLICATION_JSON)
         .body(
             BodyInserters.fromPublisher(
-                cartMono.flatMap(cartService::createCart), CartResponse.class));
+                cartMono.flatMap(cartService::createCart), ProductClientResponse.class));
   }
 
   public Mono<ServerResponse> findCartByUuid(ServerRequest request) {

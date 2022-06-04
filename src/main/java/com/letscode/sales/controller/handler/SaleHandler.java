@@ -24,12 +24,9 @@ public class SaleHandler {
 
     return ServerResponse.status(HttpStatus.OK)
         .contentType(MediaType.APPLICATION_JSON)
-        .body(
-            BodyInserters.fromPublisher(
-                saleMono.flatMap(
-                    saleRequest ->
-                        saleService.createSale(
-                            saleRequest.getCustomerUuid(), saleRequest.getCartUuid())),
-                SaleResponse.class));
+        .body(BodyInserters.fromPublisher(saleMono.flatMap(saleService::createSale), SaleResponse.class));
   }
 }
+
+//saleService.createSale(
+//    saleRequest.getCustomerUuid(), saleRequest.getCartUuid())),
