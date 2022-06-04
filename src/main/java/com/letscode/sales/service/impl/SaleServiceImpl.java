@@ -49,6 +49,7 @@ public class SaleServiceImpl implements SaleService {
               Sale sale = new Sale();
               sale.setCustomer(customer);
               cart1.setStatus(Status.FINISHED);
+              cartRepository.save(cart1).subscribe();
               sale.setCart(cart1);
 
 //              removeItemsFromProduct(cart1);
