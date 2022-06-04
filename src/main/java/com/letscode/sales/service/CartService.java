@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface CartService {
 
-  public Mono<CartResponse> createCart(CartRequest request);
+  public Mono<ProductClientResponse> createCart(CartRequest request);
 
   public Mono<ProductClientResponse> handleAddToCart(String cartUuid, CartRequest request);
 
