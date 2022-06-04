@@ -35,3 +35,20 @@ management:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+resilience4j:
+  circuitBreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 8
+        minimumNumberOfCalls: 4
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+  instances:
+    product-cb:
+      baseConfig: default
+    costumer-cb:
+      baseConfig: default
