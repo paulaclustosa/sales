@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
   // Situação: carrinho ainda não criado. Aqui se,
   // cria o carrinho e adiciona o produto e sua quantidade ao carrinho criado
   @Override
-  public Mono<CartResponse> createCart(CartRequest cartRequest) {
+  public Mono<ProductClientResponse> createCart(CartRequest cartRequest) {
     String productUuid = cartRequest.getProductUuid();
     int productQuantity = cartRequest.getQuantity();
 
@@ -38,6 +38,7 @@ public class CartServiceImpl implements CartService {
                   newProduct.setCartQuantity(cartRequest.getQuantity());
 
                   Cart newCart = new Cart(newProduct);
+                  newCart.updateSubtotal();
                   Mono<Cart> savedCart =
                       cartRepository.save(newCart).doOnNext(cart -> log.info(cart.getUuid()));
                   savedCart.subscribe(s -> log.info("Value {}", s.getUuid()));
@@ -45,7 +46,7 @@ public class CartServiceImpl implements CartService {
 
     productClientResponseMono.subscribe(s -> log.info("Value {}", s.getName()));
 
-    return Mono.just(new CartResponse()); // / TODO: 03/06/2022arrumar o retorno
+    return productClientResponseMono;
   }
 
   @Override
@@ -148,7 +149,7 @@ public class CartServiceImpl implements CartService {
 
     CartResponse cartUpdatedResponse = new CartResponse();
 
-    Mono<Cart> cartMono =
+    Mono<CartResponse> cartMono =
         cartRepository
             .findByUuid(removeItemFromCartRequest.getCartUuid())
             .doOnNext(
@@ -157,10 +158,10 @@ public class CartServiceImpl implements CartService {
                   Mono<Cart> savedCart = cartRepository.save(cart);
                   savedCart.subscribe();
                   cartUpdatedResponse.setProducts(cart.getProducts());
-                });
+                }).map(CartResponse::new);
     cartMono.subscribe();
 
-    return Mono.just(cartUpdatedResponse);
+    return cartMono;
   }
 
   @Override
