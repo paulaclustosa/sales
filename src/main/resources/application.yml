@@ -47,8 +47,8 @@ resilience4j:
         automaticTransitionFromOpenToHalfOpenEnabled: true
         waitDurationInOpenState: 10s
         failureRateThreshold: 50
-  instances:
-    product-cb:
-      baseConfig: default
-    costumer-cb:
-      baseConfig: default
+    instances:
+      product-cb:
+        baseConfig: default
+      costumer-cb:
+        baseConfig: default
