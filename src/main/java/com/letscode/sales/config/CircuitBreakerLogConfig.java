@@ -18,6 +18,7 @@ public class CircuitBreakerLogConfig {
   @Bean
   public RegistryEventConsumer<CircuitBreaker> cbLog(){
     return new RegistryEventConsumer<CircuitBreaker>() {
+
       @Override
       public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
         entryAddedEvent.getAddedEntry()
