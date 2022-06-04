@@ -27,6 +27,3 @@ public class SaleHandler {
         .body(BodyInserters.fromPublisher(saleMono.flatMap(saleService::createSale), SaleResponse.class));
   }
 }
-
-//saleService.createSale(
-//    saleRequest.getCustomerUuid(), saleRequest.getCartUuid())),
