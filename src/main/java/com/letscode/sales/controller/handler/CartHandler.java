@@ -2,6 +2,7 @@ package com.letscode.sales.controller.handler;
 
 import com.letscode.sales.dto.*;
 import com.letscode.sales.service.CartService;
+import com.mongodb.internal.connection.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,6 +51,17 @@ public class CartHandler {
             BodyInserters.fromPublisher(
                 cartMono.flatMap(cartRequest -> cartService.handleAddToCart(cartId, cartRequest)),
                 ProductClientResponse.class));
+  }
+
+  public Mono<ServerResponse> updateCart(ServerRequest request) {
+    String cartId = request.pathVariable("cartUuid");
+    Mono<CartRequest> cartMono = request.bodyToMono(CartRequest.class);
+
+    return ServerResponse.status(HttpStatus.OK)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromPublisher(
+            cartMono.flatMap(cartRequest -> cartService.updateCart(cartId, cartRequest)),
+            ProductClientResponse.class));
   }
 
   public Mono<ServerResponse> removeItemFromCart(ServerRequest request) {
